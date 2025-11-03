@@ -4,7 +4,6 @@ var word = "";
 var guesses = "";
 var guess_count = MAX_GUESSES;
 
-
 function newGame(){
     inputArea.hidden = false;
     var randomIndex = parseInt(Math.random()*POSSIBLE_WORDS.length);
@@ -17,8 +16,14 @@ function newGame(){
 function guessLetter(){
     var input = document.getElementById("guess");
     var letter = input.value;
+    //check if letter is in our guesses index. If it is we ignore it
+    if (guesses.indexOf(letter) >= 0) {
+        input.value = "";
+        return;
+    }
     if(word.indexOf(letter) < 0) {
         guess_count--;
+        //lose condition
         if(guess_count <= 0){
             inputArea.hidden = true;
         }
@@ -49,9 +54,15 @@ function updatePage(){
         guessArea.innerHTML = "You lose!";
     }
 
+    //win condition
+    //i had to google if javascript had a function to check if a string has a character in it 
+    if (!clueString.includes("_")) {
+        guessArea.innerHTML = "You win!";
+        inputArea.hidden = true;
+    }
+
     //update the image
     var image = document.getElementById("hangmanImage");
     image.src = "images/hangman"+guess_count+".gif";
 
-    //TODO: CREATE WIN CONDITION. DO NOT LET PEOPLE GUESS THE SAME LETTER TWICE (IGNORE THE SECOND GUESS IF IT HAPPENS)
 }
